@@ -1,0 +1,24 @@
+The issue stems from incorrect placement or naming of signing configurations within the custom `build.gradle` file. Expo's build process may not correctly locate the signing configuration if it's not in the expected location or if the naming conventions are inconsistent. The fixed `build.gradle.fixed` file demonstrates the correct placement and naming.  Ensure your `android/app/build.gradle` file includes the signing configurations within the `android` block, and that the signingConfig names match where Expo expects them.
+
+```gradle
+//build.gradle.fixed
+android {
+    // ... other configurations
+    signingConfigs {
+        release {
+            storeFile file("path/to/your/release-keystore.jks")
+            storePassword "your_release_store_password"
+            keyAlias "your_release_key_alias"
+            keyPassword "your_release_key_password"
+        }
+    }
+    buildTypes {
+        release {
+            // ... other build type settings
+            signingConfig signingConfigs.release
+        }
+    }
+}
+```
+
+Compare this to the original erroneous `build.gradle` to see where the config was incorrectly placed (example error placement: within a different block or outside of the `android` block, or an incorrect naming scheme).  The corrected version ensures consistent naming and proper positioning of signing configurations within the `android` block to work with Expo's build system.
